@@ -93,8 +93,9 @@ class DJISDKNode
 public:
   DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private);
   ~DJISDKNode();
+    
+  bool InitSucess;
 
-	bool InitSucess;
 
   enum TELEMETRY_TYPE
   {

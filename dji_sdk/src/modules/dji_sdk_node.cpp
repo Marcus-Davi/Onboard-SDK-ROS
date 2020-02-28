@@ -73,6 +73,8 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
   InitSucess = true;
 }
 
+InitSucess = true; 
+
 DJISDKNode::~DJISDKNode()
 {
   if(!isM100())
