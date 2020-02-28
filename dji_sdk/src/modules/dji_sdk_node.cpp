@@ -19,6 +19,7 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
     R_ENU2NED(tf::Matrix3x3(0,  1,  0, 1,  0,  0, 0,  0, -1)),
     curr_align_state(UNALIGNED)
 {
+  nh_private.param("acm_name",      acm_device, std::string("/dev/ttyACM0"));
   nh_private.param("serial_name",   serial_device, std::string("/dev/ttyUSB0"));
   nh_private.param("baud_rate",     baud_rate, 921600);
   nh_private.param("app_id",        app_id,    123456);
@@ -68,9 +69,11 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
       ROS_ERROR("initPublisher failed");
     }
   }
+
+  InitSucess = true; 
 }
 
-InitSucess = true; 
+
 
 DJISDKNode::~DJISDKNode()
 {
@@ -125,6 +128,10 @@ DJISDKNode::initVehicle(ros::NodeHandle& nh_private)
   {
     telemetry_from_fc = USE_SUBSCRIBE;
   }
+
+#ifdef ADVANCED_SENSING
+  vehicle->advancedSensing->setAcmDevicePath(acm_device.c_str());
+#endif
 
   return true;
 }
@@ -512,7 +519,7 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
 
   int nTopicRTKSupport    = sizeof(topicRTKSupport)/sizeof(topicRTKSupport[0]);
   if (vehicle->subscribe->initPackageFromTopicList(PACKAGE_ID_5HZ, nTopicRTKSupport,
-                                                   topicRTKSupport, 1, 10))
+                                                   topicRTKSupport, 1, 5))
   {
     ack = vehicle->subscribe->startPackage(PACKAGE_ID_5HZ, WAIT_TIMEOUT);
     if (ack.data == ErrorCode::SubscribeACK::SOURCE_DEVICE_OFFLINE)
