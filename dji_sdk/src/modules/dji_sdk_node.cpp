@@ -69,9 +69,11 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
       ROS_ERROR("initPublisher failed");
     }
   }
+
+  InitSucess = true; 
 }
 
-InitSucess = true; 
+
 
 DJISDKNode::~DJISDKNode()
 {
