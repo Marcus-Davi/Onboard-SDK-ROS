@@ -96,6 +96,7 @@ public:
     
 
 
+  bool InitSucess;
   enum TELEMETRY_TYPE
   {
     USE_BROADCAST = 0,
