@@ -38,13 +38,14 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
 
   //! RTK support check
   rtkSupport = false;
-  InitSucess = false;
+  InitSucess = true;
 
   // @todo need some error handling for init functions
   //! @note parsing launch file to get environment parameters
   if (!initVehicle(nh_private))
   {
     ROS_ERROR("Vehicle initialization failed");
+  InitSucess = false;
   }
 
   else
@@ -52,26 +53,28 @@ DJISDKNode::DJISDKNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
     if (!initServices(nh))
     {
       ROS_ERROR("initServices failed");
+  InitSucess = false;
     }
 
     if (!initFlightControl(nh))
     {
       ROS_ERROR("initFlightControl failed");
+  InitSucess = false;
     }
 
     if (!initSubscriber(nh))
     {
       ROS_ERROR("initSubscriber failed");
+  InitSucess = false;
     }
 
     if (!initPublisher(nh))
     {
       ROS_ERROR("initPublisher failed");
+  InitSucess = false;
     }
   }
 
-
-  InitSucess = true;
 }
 
 
