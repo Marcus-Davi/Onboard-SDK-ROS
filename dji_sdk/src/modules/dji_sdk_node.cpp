@@ -598,27 +598,28 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
   }
 
   // 400 Hz data from FC
-  std::vector<Telemetry::TopicName> topicList400Hz;
-  topicList400Hz.push_back(Telemetry::TOPIC_HARD_SYNC);
-
-  int nTopic400Hz = topicList400Hz.size();
-  if (vehicle->subscribe->initPackageFromTopicList(PACKAGE_ID_400HZ, nTopic400Hz,
-                                                   topicList400Hz.data(), 1, 400))
-  {
-    ack = vehicle->subscribe->startPackage(PACKAGE_ID_400HZ, WAIT_TIMEOUT);
-    if(ACK::getError(ack))
-    {
-      vehicle->subscribe->removePackage(PACKAGE_ID_400HZ, WAIT_TIMEOUT);
-      ROS_ERROR("Failed to start 400Hz package");
-      return false;
-    }
-    else
-    {
-      vehicle->subscribe->registerUserPackageUnpackCallback(PACKAGE_ID_400HZ, publish400HzData, this);
-    }
-  }
-
-  ros::Duration(1).sleep();
+//ignore 400HZ
+//   std::vector<Telemetry::TopicName> topicList400Hz;
+//   topicList400Hz.push_back(Telemetry::TOPIC_HARD_SYNC);
+// 
+//   int nTopic400Hz = topicList400Hz.size();
+//   if (vehicle->subscribe->initPackageFromTopicList(PACKAGE_ID_400HZ, nTopic400Hz,
+//                                                    topicList400Hz.data(), 1, 400))
+//   {
+//     ack = vehicle->subscribe->startPackage(PACKAGE_ID_400HZ, WAIT_TIMEOUT);
+//     if(ACK::getError(ack))
+//     {
+//       vehicle->subscribe->removePackage(PACKAGE_ID_400HZ, WAIT_TIMEOUT);
+//       ROS_ERROR("Failed to start 400Hz package");
+//       return false;
+//     }
+//     else
+//     {
+//       vehicle->subscribe->registerUserPackageUnpackCallback(PACKAGE_ID_400HZ, publish400HzData, this);
+//     }
+//   }
+// 
+   ros::Duration(1).sleep();
   return true;
 }
 
