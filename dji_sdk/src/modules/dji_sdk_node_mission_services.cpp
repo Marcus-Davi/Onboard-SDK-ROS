@@ -219,7 +219,7 @@ DJISDKNode::missionWpSetSpeedCallback(
   }
   else
   {
-    ROS_ERROR("no waypoint mission initiated ");
+  //  ROS_ERROR("no waypoint mission initiated "); // msg irritante comentada
     response.result = false;
   }
 
