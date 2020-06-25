@@ -446,7 +446,7 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
 
   int nTopic100Hz    = topicList100Hz.size();
   if (vehicle->subscribe->initPackageFromTopicList(PACKAGE_ID_100HZ, nTopic100Hz,
-                                                   topicList100Hz.data(), 1, 100))
+                                                   topicList100Hz.data(), 1, 50)) //modificada. 100 -> 50
   {
     ack = vehicle->subscribe->startPackage(PACKAGE_ID_100HZ, WAIT_TIMEOUT);
     if (ACK::getError(ack))
@@ -471,21 +471,21 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
   topicList50Hz.push_back(Telemetry::TOPIC_STATUS_DISPLAYMODE);
   topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_ANGLES);
   topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_STATUS);
-  topicList50Hz.push_back(Telemetry::TOPIC_RC);
+  // topicList50Hz.push_back(Telemetry::TOPIC_RC);
   topicList50Hz.push_back(Telemetry::TOPIC_VELOCITY);
   topicList50Hz.push_back(Telemetry::TOPIC_GPS_CONTROL_LEVEL);
 
   if(vehicle->getFwVersion() > versionBase33)
   {
-    topicList50Hz.push_back(Telemetry::TOPIC_POSITION_VO);
-    topicList50Hz.push_back(Telemetry::TOPIC_RC_WITH_FLAG_DATA);
-    topicList50Hz.push_back(Telemetry::TOPIC_FLIGHT_ANOMALY);
+   //  topicList50Hz.push_back(Telemetry::TOPIC_POSITION_VO);
+   //  topicList50Hz.push_back(Telemetry::TOPIC_RC_WITH_FLAG_DATA);
+   //  topicList50Hz.push_back(Telemetry::TOPIC_FLIGHT_ANOMALY);
 
     // A3 and N3 has access to more buttons on RC
     std::string hardwareVersion(vehicle->getHwVersion());
     if( (hardwareVersion == std::string(Version::N3)) || hardwareVersion == std::string(Version::A3))
     {
-      topicList50Hz.push_back(Telemetry::TOPIC_RC_FULL_RAW_DATA);
+      // topicList50Hz.push_back(Telemetry::TOPIC_RC_FULL_RAW_DATA);
     }
 
     // Advertise rc connection status only if this topic is supported by FW
@@ -538,12 +538,12 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
   }
 
   std::vector<Telemetry::TopicName> topicList5hz;
-  topicList5hz.push_back(Telemetry::TOPIC_GPS_DATE);
-  topicList5hz.push_back(Telemetry::TOPIC_GPS_TIME);
-  topicList5hz.push_back(Telemetry::TOPIC_GPS_POSITION);
-  topicList5hz.push_back(Telemetry::TOPIC_GPS_VELOCITY);
-  topicList5hz.push_back(Telemetry::TOPIC_GPS_DETAILS);
-  topicList5hz.push_back(Telemetry::TOPIC_BATTERY_INFO);
+//   topicList5hz.push_back(Telemetry::TOPIC_GPS_DATE);
+//   topicList5hz.push_back(Telemetry::TOPIC_GPS_TIME);
+//   topicList5hz.push_back(Telemetry::TOPIC_GPS_POSITION);
+//   topicList5hz.push_back(Telemetry::TOPIC_GPS_VELOCITY);
+//   topicList5hz.push_back(Telemetry::TOPIC_GPS_DETAILS);
+   topicList5hz.push_back(Telemetry::TOPIC_BATTERY_INFO);
 
   if(rtkSupport)
   {
@@ -629,7 +629,7 @@ DJISDKNode::cleanUpSubscribeFromFC()
   vehicle->subscribe->removePackage(0, WAIT_TIMEOUT);
   vehicle->subscribe->removePackage(1, WAIT_TIMEOUT);
   vehicle->subscribe->removePackage(2, WAIT_TIMEOUT);
-  vehicle->subscribe->removePackage(3, WAIT_TIMEOUT);
+  // vehicle->subscribe->removePackage(3, WAIT_TIMEOUT); //removemos 400Hz
   if (vehicle->hardSync)
   {
     vehicle->hardSync->unsubscribeNMEAMsgs();

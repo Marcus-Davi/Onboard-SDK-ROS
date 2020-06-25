@@ -430,114 +430,114 @@ DJISDKNode::publish50HzData(Vehicle* vehicle, RecvContainer recvFrame,
    * note: Since FW version 3.3.0 and SDK version 3.7, we expose all the button on the LB2 RC
    *       as well as the RC connection status via different topics.
    */
-  if(vehicle->getFwVersion() > versionBase33)
-  {
-    Telemetry::TypeMap<Telemetry::TOPIC_POSITION_VO>::type vo_position =
-          vehicle->subscribe->getValue<Telemetry::TOPIC_POSITION_VO>();
-
-    dji_sdk::VOPosition vo_pos;
-    // This name does not follow the convention because we are not sure it is real NED.
-    vo_pos.header.frame_id = "/ground_nav";
-    vo_pos.header.stamp = msg_time;
-    vo_pos.x  = vo_position.x;
-    vo_pos.y       = vo_position.y;
-    vo_pos.z        = vo_position.z;
-    vo_pos.xHealth = vo_position.xHealth;
-    vo_pos.yHealth = vo_position.yHealth;
-    vo_pos.zHealth = vo_position.zHealth;
-    p->vo_position_publisher.publish(vo_pos);
-  
-    Telemetry::TypeMap<Telemetry::TOPIC_RC_WITH_FLAG_DATA>::type rc_with_flag =
-            vehicle->subscribe->getValue<Telemetry::TOPIC_RC_WITH_FLAG_DATA>();
-
-    sensor_msgs::Joy rc_joy;
-    rc_joy.header.stamp    = msg_time;
-    rc_joy.header.frame_id = "rc";
-
-    rc_joy.axes.reserve(12);
-    rc_joy.axes.push_back(static_cast<float>(rc_with_flag.roll));
-    rc_joy.axes.push_back(static_cast<float>(rc_with_flag.pitch));
-    rc_joy.axes.push_back(static_cast<float>(rc_with_flag.yaw));
-    rc_joy.axes.push_back(static_cast<float>(rc_with_flag.throttle));
-
-    // A3 and N3 has access to more buttons on RC
-    std::string hardwareVersion(vehicle->getHwVersion());
-    if( (hardwareVersion == std::string(Version::N3)) || hardwareVersion == std::string(Version::A3))
-    {
-      Telemetry::TypeMap<Telemetry::TOPIC_RC_FULL_RAW_DATA>::type rc_full_raw =
-        vehicle->subscribe->getValue<Telemetry::TOPIC_RC_FULL_RAW_DATA>();
-      rc_joy.axes.push_back(static_cast<float>(-(rc_full_raw.lb2.mode - 1024)    / 660));
-      rc_joy.axes.push_back(static_cast<float>(-(rc_full_raw.lb2.gear - 1519)    / 165));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.camera -364)   / 1320));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.video - 364)    / 1320));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.videoPause-364) / 1320));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.goHome-364) /1320));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.leftWheel-1024.0)  / 660.0));
-      rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.rightWheelButton - 364)/ 1320));
-    }
-    else
-    {
-      Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
-        vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
-
-      rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
-      rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
-    }
-
-    p->rc_publisher.publish(rc_joy);
-
-    bool temp;
-    temp = rc_with_flag.flag.skyConnected && rc_with_flag.flag.groundConnected;
-
-    std_msgs::UInt8 rc_connected;
-    rc_connected.data = temp ? 1 : 0;
-    p->rc_connection_status_publisher.publish(rc_connected);
-
-    // Publish flight anomaly if FC is supported
-    Telemetry::TypeMap<Telemetry::TOPIC_FLIGHT_ANOMALY>::type flight_anomaly_data =
-            vehicle->subscribe->getValue<Telemetry::TOPIC_FLIGHT_ANOMALY>();
-
-    dji_sdk::FlightAnomaly flight_anomaly_msg;
-    flight_anomaly_msg.data = *(reinterpret_cast<uint32_t*>(&flight_anomaly_data));
-    p->flight_anomaly_publisher.publish(flight_anomaly_msg);
-  }
-  else
-  {
-    /********* RC Map (A3) *********
-    *
-    *       -10000  <--->  0      <---> 10000
-    * MODE: API(F)  <---> ATTI(A) <--->  POS (P)
-    *
-    *        CH3 +10000                     CH1 +10000
-    *               ^                              ^
-    *               |                              |                   / -5000
-    *    CH2        |                   CH0        |                  /
-    *  -10000 <-----------> +10000    -10000 <-----------> +10000    H
-    *               |                              |                  \
-    *               |                              |                   \ -10000
-    *               V                              V
-    *            -10000                         -10000
-    *
-    *   In this code, before publishing, we normalize RC
-    *****************************/
-
-    Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
-            vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
-
-    sensor_msgs::Joy rc_joy;
-    rc_joy.header.stamp    = msg_time;
-    rc_joy.header.frame_id = "rc";
-
-    rc_joy.axes.reserve(6);
-
-    rc_joy.axes.push_back(static_cast<float>(rc.roll     / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(rc.pitch    / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(rc.yaw      / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(rc.throttle / 10000.0));
-    rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
-    rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
-    p->rc_publisher.publish(rc_joy);
-  }
+//   if(vehicle->getFwVersion() > versionBase33)
+//   {
+//     Telemetry::TypeMap<Telemetry::TOPIC_POSITION_VO>::type vo_position =
+//           vehicle->subscribe->getValue<Telemetry::TOPIC_POSITION_VO>();
+// 
+//     dji_sdk::VOPosition vo_pos;
+//     // This name does not follow the convention because we are not sure it is real NED.
+//     vo_pos.header.frame_id = "/ground_nav";
+//     vo_pos.header.stamp = msg_time;
+//     vo_pos.x  = vo_position.x;
+//     vo_pos.y       = vo_position.y;
+//     vo_pos.z        = vo_position.z;
+//     vo_pos.xHealth = vo_position.xHealth;
+//     vo_pos.yHealth = vo_position.yHealth;
+//     vo_pos.zHealth = vo_position.zHealth;
+//     p->vo_position_publisher.publish(vo_pos);
+//   
+//     Telemetry::TypeMap<Telemetry::TOPIC_RC_WITH_FLAG_DATA>::type rc_with_flag =
+//             vehicle->subscribe->getValue<Telemetry::TOPIC_RC_WITH_FLAG_DATA>();
+// 
+//     sensor_msgs::Joy rc_joy;
+//     rc_joy.header.stamp    = msg_time;
+//     rc_joy.header.frame_id = "rc";
+// 
+//     rc_joy.axes.reserve(12);
+//     rc_joy.axes.push_back(static_cast<float>(rc_with_flag.roll));
+//     rc_joy.axes.push_back(static_cast<float>(rc_with_flag.pitch));
+//     rc_joy.axes.push_back(static_cast<float>(rc_with_flag.yaw));
+//     rc_joy.axes.push_back(static_cast<float>(rc_with_flag.throttle));
+// 
+//     // A3 and N3 has access to more buttons on RC
+//     std::string hardwareVersion(vehicle->getHwVersion());
+//     if( (hardwareVersion == std::string(Version::N3)) || hardwareVersion == std::string(Version::A3))
+//     {
+//       Telemetry::TypeMap<Telemetry::TOPIC_RC_FULL_RAW_DATA>::type rc_full_raw =
+//         vehicle->subscribe->getValue<Telemetry::TOPIC_RC_FULL_RAW_DATA>();
+//       rc_joy.axes.push_back(static_cast<float>(-(rc_full_raw.lb2.mode - 1024)    / 660));
+//       rc_joy.axes.push_back(static_cast<float>(-(rc_full_raw.lb2.gear - 1519)    / 165));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.camera -364)   / 1320));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.video - 364)    / 1320));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.videoPause-364) / 1320));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.goHome-364) /1320));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.leftWheel-1024.0)  / 660.0));
+//       rc_joy.axes.push_back(static_cast<float>((rc_full_raw.lb2.rightWheelButton - 364)/ 1320));
+//     }
+//     else
+//     {
+//       Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
+//         vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
+// 
+//       rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
+//       rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
+//     }
+// 
+//     p->rc_publisher.publish(rc_joy);
+// 
+//     bool temp;
+//     temp = rc_with_flag.flag.skyConnected && rc_with_flag.flag.groundConnected;
+// 
+//     std_msgs::UInt8 rc_connected;
+//     rc_connected.data = temp ? 1 : 0;
+//     p->rc_connection_status_publisher.publish(rc_connected);
+// 
+//     // Publish flight anomaly if FC is supported
+//     Telemetry::TypeMap<Telemetry::TOPIC_FLIGHT_ANOMALY>::type flight_anomaly_data =
+//             vehicle->subscribe->getValue<Telemetry::TOPIC_FLIGHT_ANOMALY>();
+// 
+//     dji_sdk::FlightAnomaly flight_anomaly_msg;
+//     flight_anomaly_msg.data = *(reinterpret_cast<uint32_t*>(&flight_anomaly_data));
+//     p->flight_anomaly_publisher.publish(flight_anomaly_msg);
+//   }
+//   else
+//   {
+//     /********* RC Map (A3) *********
+//     *
+//     *       -10000  <--->  0      <---> 10000
+//     * MODE: API(F)  <---> ATTI(A) <--->  POS (P)
+//     *
+//     *        CH3 +10000                     CH1 +10000
+//     *               ^                              ^
+//     *               |                              |                   / -5000
+//     *    CH2        |                   CH0        |                  /
+//     *  -10000 <-----------> +10000    -10000 <-----------> +10000    H
+//     *               |                              |                  \
+//     *               |                              |                   \ -10000
+//     *               V                              V
+//     *            -10000                         -10000
+//     *
+//     *   In this code, before publishing, we normalize RC
+//     *****************************/
+// 
+//     Telemetry::TypeMap<Telemetry::TOPIC_RC>::type rc =
+//             vehicle->subscribe->getValue<Telemetry::TOPIC_RC>();
+// 
+//     sensor_msgs::Joy rc_joy;
+//     rc_joy.header.stamp    = msg_time;
+//     rc_joy.header.frame_id = "rc";
+// 
+//     rc_joy.axes.reserve(6);
+// 
+//     rc_joy.axes.push_back(static_cast<float>(rc.roll     / 10000.0));
+//     rc_joy.axes.push_back(static_cast<float>(rc.pitch    / 10000.0));
+//     rc_joy.axes.push_back(static_cast<float>(rc.yaw      / 10000.0));
+//     rc_joy.axes.push_back(static_cast<float>(rc.throttle / 10000.0));
+//     rc_joy.axes.push_back(static_cast<float>(rc.mode*1.0));
+//     rc_joy.axes.push_back(static_cast<float>(rc.gear*1.0));
+//     p->rc_publisher.publish(rc_joy);
+//   }
 }
 
 void
