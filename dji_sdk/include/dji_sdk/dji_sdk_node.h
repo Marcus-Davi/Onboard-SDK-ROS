@@ -381,6 +381,7 @@ private:
   ros::Publisher rtk_yaw_info_publisher;
   ros::Publisher rtk_connection_status_publisher;
   ros::Publisher flight_anomaly_publisher;
+  ros::Publisher rtk_info_publisher;
   //! Local Position Publisher (Publishes local position in ENU frame)
   ros::Publisher local_position_publisher;
   ros::Publisher local_frame_ref_publisher;

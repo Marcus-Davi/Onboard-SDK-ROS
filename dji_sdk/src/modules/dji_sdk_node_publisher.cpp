@@ -111,6 +111,15 @@ DJISDKNode::dataBroadcastCallback()
     gps_health.data = global_pos.health;
     gps_health_publisher.publish(gps_health);
 
+    //Tentar publicar informações RTK tbm!
+  DJI::OSDK::Telemetry::RTK rtk_info = vehicle->broadcast->getRTKInfo();
+   std_msgs::UInt8 rtk_info_msg;
+   rtk_info_msg.data = rtk_info.posHealthFlag;
+   rtk_info_publisher.publish(rtk_info_msg);
+
+
+
+  
     sensor_msgs::NavSatFix gps_pos;
     gps_pos.header.stamp    = now_time;
     gps_pos.header.frame_id = "gps";

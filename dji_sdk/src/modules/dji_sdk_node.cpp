@@ -408,6 +408,9 @@ DJISDKNode::initPublisher(ros::NodeHandle& nh)
 
     trigger_publisher = nh.advertise<sensor_msgs::TimeReference>("dji_sdk/trigger_time", 10);
 
+    //Add marcus
+    rtk_info_publisher = nh.advertise<std_msgs::UInt8>("dji_sdk/rtk_info",10);
+
     if (!initDataSubscribeFromFC(nh))
     {
       return false;
