@@ -415,25 +415,28 @@ DJISDKNode::publish50HzData(Vehicle* vehicle, RecvContainer recvFrame,
   p->current_gps_health = gps_ctrl_level;
   p->gps_health_publisher.publish(msg_gps_ctrl_level);
 
-  Telemetry::TypeMap<Telemetry::TOPIC_GIMBAL_ANGLES>::type gimbal_angle =
-    vehicle->subscribe->getValue<Telemetry::TOPIC_GIMBAL_ANGLES>();
+  // Comentado 20/07/2020
 
-  geometry_msgs::Vector3Stamped gimbal_angle_vec3;
-
-  gimbal_angle_vec3.header.stamp = ros::Time::now();
-  gimbal_angle_vec3.vector.x     = gimbal_angle.x;
-  gimbal_angle_vec3.vector.y     = gimbal_angle.y;
-  gimbal_angle_vec3.vector.z     = gimbal_angle.z;
-  p->gimbal_angle_publisher.publish(gimbal_angle_vec3);
+//   Telemetry::TypeMap<Telemetry::TOPIC_GIMBAL_ANGLES>::type gimbal_angle =
+//     vehicle->subscribe->getValue<Telemetry::TOPIC_GIMBAL_ANGLES>();
+// 
+//   geometry_msgs::Vector3Stamped gimbal_angle_vec3;
+// 
+//   gimbal_angle_vec3.header.stamp = ros::Time::now();
+//   gimbal_angle_vec3.vector.x     = gimbal_angle.x;
+//   gimbal_angle_vec3.vector.y     = gimbal_angle.y;
+//   gimbal_angle_vec3.vector.z     = gimbal_angle.z;
+//   p->gimbal_angle_publisher.publish(gimbal_angle_vec3);
 
   // See dji_sdk.h for details about display_mode
 
-  Telemetry::TypeMap<Telemetry::TOPIC_STATUS_DISPLAYMODE>::type dm =
-    vehicle->subscribe->getValue<Telemetry::TOPIC_STATUS_DISPLAYMODE>();
-
-  std_msgs::UInt8 status_dm;
-  status_dm.data = dm;
-  p->displaymode_publisher.publish(status_dm);
+  // Comentado 20/07/2020 
+//   Telemetry::TypeMap<Telemetry::TOPIC_STATUS_DISPLAYMODE>::type dm =
+//     vehicle->subscribe->getValue<Telemetry::TOPIC_STATUS_DISPLAYMODE>();
+// 
+//   std_msgs::UInt8 status_dm;
+//   status_dm.data = dm;
+//   p->displaymode_publisher.publish(status_dm);
 
   /*!
    * note: Since FW version 3.3.0 and SDK version 3.7, we expose all the button on the LB2 RC

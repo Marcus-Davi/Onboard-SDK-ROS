@@ -471,9 +471,9 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
   topicList50Hz.push_back(Telemetry::TOPIC_ALTITUDE_FUSIONED);
   topicList50Hz.push_back(Telemetry::TOPIC_HEIGHT_FUSION);
   topicList50Hz.push_back(Telemetry::TOPIC_STATUS_FLIGHT);
-  topicList50Hz.push_back(Telemetry::TOPIC_STATUS_DISPLAYMODE);
-  topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_ANGLES);
-  topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_STATUS);
+  // topicList50Hz.push_back(Telemetry::TOPIC_STATUS_DISPLAYMODE);
+  //topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_ANGLES);
+  //topicList50Hz.push_back(Telemetry::TOPIC_GIMBAL_STATUS);
   // topicList50Hz.push_back(Telemetry::TOPIC_RC);
   topicList50Hz.push_back(Telemetry::TOPIC_VELOCITY);
   topicList50Hz.push_back(Telemetry::TOPIC_GPS_CONTROL_LEVEL);
