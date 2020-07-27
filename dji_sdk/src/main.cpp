@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
 		  return -1;
   }
 
-  ros::AsyncSpinner spinner(4); // Use 4 threads
+  ros::AsyncSpinner spinner(6); // Use 4 threads
   spinner.start();
   ros::waitForShutdown();
 
