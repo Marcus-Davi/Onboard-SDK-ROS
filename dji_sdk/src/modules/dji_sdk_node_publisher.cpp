@@ -265,6 +265,18 @@ DJISDKNode::publish5HzData(Vehicle *vehicle, RecvContainer recvFrame,
   msg_battery_state.present = (battery_info.voltage!=0);
   p->battery_state_publisher.publish(msg_battery_state);
 
+  Telemetry::TypeMap<Telemetry::TOPIC_GPS_POSITION>::type gps_raw_position = 
+  vehicle->subscribe->getValue<Telemetry::TOPIC_GPS_POSITION> ();
+
+
+  sensor_msgs::NavSatFix gps_raw;
+  gps_raw.header.stamp= msg_time;
+  gps_raw.latitude = gps_raw_position.x;
+  gps_raw.longitude = gps_raw_position.y;
+  gps_raw.altitude = gps_raw_position.z;
+  p->gps_raw_position_publisher.publish(gps_raw); // TODO se der problema, comentamos aqui
+
+
   if(p->rtkSupport)
   {
     Telemetry::TypeMap<Telemetry::TOPIC_RTK_POSITION>::type rtk_telemetry_position=

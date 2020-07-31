@@ -276,6 +276,10 @@ DJISDKNode::initPublisher(ros::NodeHandle& nh)
   gps_position_publisher =
     nh.advertise<sensor_msgs::NavSatFix>("dji_sdk/gps_position", 10);
 
+    /* adicionado marcus */
+    gps_raw_position_publisher =
+    nh.advertise<sensor_msgs::NavSatFix>("dji_sdk/gps_raw_position", 10);
+
   /*!
    *   x [m]. Positive along navigation frame x axis
    *   y [m]. Positive along navigation frame y axis
@@ -543,7 +547,7 @@ DJISDKNode::initDataSubscribeFromFC(ros::NodeHandle& nh)
   std::vector<Telemetry::TopicName> topicList5hz;
 //   topicList5hz.push_back(Telemetry::TOPIC_GPS_DATE);
 //   topicList5hz.push_back(Telemetry::TOPIC_GPS_TIME);
-//   topicList5hz.push_back(Telemetry::TOPIC_GPS_POSITION);
+    topicList5hz.push_back(Telemetry::TOPIC_GPS_POSITION); // RAW GPS ?
 //   topicList5hz.push_back(Telemetry::TOPIC_GPS_VELOCITY);
 //   topicList5hz.push_back(Telemetry::TOPIC_GPS_DETAILS);
    topicList5hz.push_back(Telemetry::TOPIC_BATTERY_INFO);

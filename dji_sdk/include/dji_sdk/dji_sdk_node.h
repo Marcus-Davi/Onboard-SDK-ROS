@@ -365,6 +365,7 @@ private:
   ros::Publisher flight_status_publisher;
   ros::Publisher gps_health_publisher;
   ros::Publisher gps_position_publisher;
+  ros::Publisher gps_raw_position_publisher;
   ros::Publisher vo_position_publisher;
   ros::Publisher height_publisher;
   ros::Publisher velocity_publisher;
