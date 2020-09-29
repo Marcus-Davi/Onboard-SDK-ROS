@@ -114,7 +114,7 @@ DJISDKNode::missionWpUploadCallback(
 
     ROS_INFO("uploaded the %dth waypoint\n", (wpData.index + 1));
     i += 1;
-    sleep(1);
+    sleep(0.5); // why ?
   }
 
   ROS_INFO("waypoint mission initialized and uploaded");
